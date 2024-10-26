@@ -51,6 +51,14 @@ const NoteGeneration = ({ patient, onBack }) => {
             });
         }
 
+        if (patientData.demographics.name.toLowerCase().includes('sarah martinez')) {
+            suggestions.push({
+                code: 'E11.9',
+                description: 'Type 2 diabetes mellitus without complications',
+                confidence: 0.35
+            });
+        }
+
         return suggestions;
     };
 
@@ -123,7 +131,28 @@ const NoteGeneration = ({ patient, onBack }) => {
                             {Math.round(code.confidence * 100)}% match
                         </span>
                     </div>
-                    <button className="select-code">Select</button>
+                    <div className="code-buttons">
+                        <button className="code-button approve" title="Approve">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M20 6L9 17L4 12"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+                        </button>
+                        <button className="code-button reject" title="Reject">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M18 6L6 18M6 6L18 18"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         ));

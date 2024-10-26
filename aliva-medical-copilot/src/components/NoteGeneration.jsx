@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './NoteGeneration.css';
 
 const NoteGeneration = ({ patient, onBack }) => {
@@ -9,6 +9,12 @@ const NoteGeneration = ({ patient, onBack }) => {
         assessment: true,
         plan: true
     });
+    const [isLoadingICD, setIsLoadingICD] = useState(false);
+    const [isLoadingCPT, setIsLoadingCPT] = useState(false);
+    const [suggestedICDCodes, setSuggestedICDCodes] = useState([]);
+    const [suggestedCPTCodes, setSuggestedCPTCodes] = useState([]);
+    const [showICDCodes, setShowICDCodes] = useState(false);
+    const [showCPTCodes, setShowCPTCodes] = useState(false);
 
     const toggleSection = (section) => {
         setExpandedSections(prev => ({
@@ -17,8 +23,115 @@ const NoteGeneration = ({ patient, onBack }) => {
         }));
     };
 
+    const generateICDCodes = (patientData) => {
+        const suggestions = [];
+
+        if (patientData.demographics.diagnosis) {
+            suggestions.push({
+                code: 'F32.2',
+                description: patientData.demographics.diagnosis,
+                confidence: 0.95
+            });
+        }
+
+        if (patientData.soap?.subjective?.includes('anxiety')) {
+            suggestions.push({
+                code: 'F41.1',
+                description: 'Generalized Anxiety Disorder',
+                confidence: 0.85
+            });
+        }
+
+        if (patientData.soap?.objective?.presentation?.some(item =>
+            item.toLowerCase().includes('insomnia'))) {
+            suggestions.push({
+                code: 'G47.00',
+                description: 'Insomnia, Unspecified',
+                confidence: 0.75
+            });
+        }
+
+        return suggestions;
+    };
+
+    const generateCPTCodes = (patientData) => {
+        const suggestions = [];
+
+        if (patientData.visitType === 'follow_up') {
+            suggestions.push({
+                code: '99214',
+                description: 'Office Visit, Established Patient - Moderate Complexity',
+                confidence: 0.90
+            });
+        } else {
+            suggestions.push({
+                code: '99204',
+                description: 'Office Visit, New Patient - Moderate Complexity',
+                confidence: 0.85
+            });
+        }
+
+        if (patientData.services?.includes('psychotherapy')) {
+            suggestions.push({
+                code: '90834',
+                description: 'Psychotherapy, 45 minutes',
+                confidence: 0.95
+            });
+        }
+
+        return suggestions;
+    };
+
+    const handleGenerateCodes = async (type) => {
+        if (type === 'ICD') {
+            setIsLoadingICD(true);
+            setShowICDCodes(false);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            const codes = generateICDCodes(patient);
+            setSuggestedICDCodes(codes);
+            setIsLoadingICD(false);
+            setShowICDCodes(true);
+        } else {
+            setIsLoadingCPT(true);
+            setShowCPTCodes(false);
+            await new Promise(resolve => setTimeout(resolve, 500));
+            const codes = generateCPTCodes(patient);
+            setSuggestedCPTCodes(codes);
+            setIsLoadingCPT(false);
+            setShowCPTCodes(true);
+        }
+    };
+
+    const renderCodeSuggestions = (codes, type) => {
+        return codes.map((code, index) => (
+            <div
+                className="code-item"
+                key={`${type}-${code.code}-${index}`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+            >
+                <div className="code-info">
+                    <span className="code">{code.code}</span>
+                    <span className="description">{code.description}</span>
+                </div>
+                <div className="code-actions">
+                    <div className="confidence-meter">
+                        <div
+                            className="confidence-bar"
+                            style={{ width: `${code.confidence * 100}%` }}
+                        />
+                        <span className="confidence-text">
+                            {Math.round(code.confidence * 100)}% match
+                        </span>
+                    </div>
+                    <button className="select-code">Select</button>
+                </div>
+            </div>
+        ));
+    };
+
     const SoapSection = ({ title, content, section }) => {
         const isExpanded = expandedSections[section];
+
         return (
             <div className={`soap-section ${isExpanded ? 'expanded' : ''}`}>
                 <div
@@ -43,15 +156,16 @@ const NoteGeneration = ({ patient, onBack }) => {
                     </svg>
                 </div>
                 <div className={`soap-content ${isExpanded ? 'expanded' : ''}`}>
-                    <textarea
-                        placeholder={`Enter ${title.toLowerCase()} information...`}
-                        defaultValue={content}
-                    />
+                    <div className="soap-content-inner">
+                        <textarea
+                            placeholder={`Enter ${title.toLowerCase()} information...`}
+                            defaultValue={content}
+                        />
+                    </div>
                 </div>
             </div>
         );
     };
-
 
     return (
         <div className="note-generation">
@@ -59,7 +173,12 @@ const NoteGeneration = ({ patient, onBack }) => {
                 <div className="header-content">
                     <button className="back-button" onClick={onBack}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M19 12H5M5 12L12 19M5 12L12 5"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
                         </svg>
                         <span>Back to Overview</span>
                     </button>
@@ -120,26 +239,92 @@ const NoteGeneration = ({ patient, onBack }) => {
                         <div className="coding-section">
                             <div className="coding-box">
                                 <h3>Suggested ICD-10 Codes</h3>
-                                <div className="code-suggestions">
-                                    <div className="code-item">
-                                        <span className="code">F32.2</span>
-                                        <span className="description">Major Depressive Disorder, Severe</span>
-                                        <button className="select-code">Select</button>
+                                <button
+                                    className={`generate-button ${isLoadingICD ? 'loading' : ''}`}
+                                    onClick={() => handleGenerateCodes('ICD')}
+                                    disabled={isLoadingICD}
+                                >
+                                    {isLoadingICD ? (
+                                        <>
+                                            <div className="loader"></div>
+                                            <span>Generating...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <svg className="ai-icon" viewBox="0 0 24 24" fill="none">
+                                                <path d="M12 2L2 7L12 12L22 7L12 2Z"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                />
+                                                <path d="M2 17L12 22L22 17"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                />
+                                                <path d="M2 12L12 17L22 12"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                />
+                                            </svg>
+                                            <span>Generate with AI</span>
+                                        </>
+                                    )}
+                                </button>
+                                {showICDCodes && (
+                                    <div className="code-suggestions">
+                                        {renderCodeSuggestions(suggestedICDCodes, 'ICD')}
                                     </div>
-                                    {/* Add more code suggestions */}
-                                </div>
+                                )}
                             </div>
 
                             <div className="coding-box">
                                 <h3>Suggested CPT Codes</h3>
-                                <div className="code-suggestions">
-                                    <div className="code-item">
-                                        <span className="code">99214</span>
-                                        <span className="description">Office Visit, Established Patient</span>
-                                        <button className="select-code">Select</button>
+                                <button
+                                    className={`generate-button ${isLoadingCPT ? 'loading' : ''}`}
+                                    onClick={() => handleGenerateCodes('CPT')}
+                                    disabled={isLoadingCPT}
+                                >
+                                    {isLoadingCPT ? (
+                                        <>
+                                            <div className="loader"></div>
+                                            <span>Generating...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <svg className="ai-icon" viewBox="0 0 24 24" fill="none">
+                                                <path d="M12 2L2 7L12 12L22 7L12 2Z"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                />
+                                                <path d="M2 17L12 22L22 17"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                />
+                                                <path d="M2 12L12 17L22 12"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                />
+                                            </svg>
+                                            <span>Generate with AI</span>
+                                        </>
+                                    )}
+                                </button>
+                                {showCPTCodes && (
+                                    <div className="code-suggestions">
+                                        {renderCodeSuggestions(suggestedCPTCodes, 'CPT')}
                                     </div>
-                                    {/* Add more code suggestions */}
-                                </div>
+                                )}
                             </div>
                         </div>
                     )}

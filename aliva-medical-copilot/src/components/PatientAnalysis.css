@@ -1,0 +1,265 @@
+.patient-analysis {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+  }
+  
+  .selected-patient-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--accent-color), #4a90e2);
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+  .selected-patient-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+
+  .note-gen-button {
+    background-color: white;
+    color: var(--accent-color);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.note-gen-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #f8f9fa;
+}
+
+.note-gen-button span {
+    display: inline-block;
+}
+
+.note-gen-button .arrow {
+    width: 18px;
+    height: 18px;
+    stroke: var(--accent-color);
+    transition: transform 0.3s ease;
+}
+
+.note-gen-button:hover .arrow {
+    transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+    .selected-patient-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .note-gen-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+  
+  .content-container {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  
+  .patient-list {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 12px;
+    height: calc(100vh - 200px);
+    overflow-y: auto;
+  }
+  
+  .patient-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+  }
+  
+  .patient-card:hover {
+    transform: translateY(-2px);
+    background: rgba(88, 166, 255, 0.15);
+    border-color: var(--accent-color);
+  }
+  
+  .patient-card.selected {
+    background: linear-gradient(135deg, var(--accent-color), #4a90e2);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);
+  }
+  
+  .patient-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+  }
+  
+  .patient-card p {
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  
+  .analysis-boxes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .analysis-box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    transition: all 0.2s ease;
+  }
+  
+  .analysis-box:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-color);
+  }
+  
+  .analysis-box h3 {
+    margin: 0 0 1.5rem 0;
+    color: var(--accent-color);
+    font-size: 1.3rem;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.5rem;
+  }
+  
+  .analysis-box p {
+    margin: 0.5rem 0;
+  }
+  
+  .analysis-box ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0.5rem 0;
+  }
+  
+  .analysis-box li {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+  }
+  
+  /* Custom scrollbar for patient list */
+  .patient-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .patient-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+  
+  .patient-list::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+  }
+  
+  .patient-list::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
+  }
+  
+  @media (max-width: 1200px) {
+    .content-container {
+      grid-template-columns: 1fr;
+    }
+  
+    .patient-list {
+      height: auto;
+      max-height: 400px;
+    }
+  
+    .analysis-boxes {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .patient-analysis {
+      padding: 1rem;
+    }
+  
+    .selected-patient-header h2 {
+      font-size: 1.4rem;
+    }
+  
+    .analysis-box {
+      padding: 1.5rem;
+    }
+  }
+
+  /* Add these new styles to your existing CSS file */
+
+.soap-section {
+    margin-bottom: 1.5rem;
+}
+
+.soap-section:last-child {
+    margin-bottom: 0;
+}
+
+.soap-section > p:first-child {
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.vitals, .findings {
+    margin-top: 1rem;
+}
+
+.vitals ul, .findings ul {
+    margin-top: 0.5rem;
+}
+
+.vitals li, .findings li {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+.vitals li:last-child, .findings li:last-child {
+    margin-bottom: 0;
+}
+
+.analysis-box p strong {
+    color: var(--accent-color);
+}
+
+.patient-id {
+    font-size: 0.8em;
+    opacity: 0.8;
+    margin-left: 0.5rem;
+}
+
+.section-title {
+    margin: 0 0 1rem 0;
+    color: var(--accent-color);
+    font-size: 1.2rem;
+}

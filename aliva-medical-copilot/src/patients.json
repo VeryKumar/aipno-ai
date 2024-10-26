@@ -1,0 +1,196 @@
+{
+    "patients": [
+        {
+            "case_id": "PD001",
+            "demographics": {
+                "name": "William Thompson",
+                "age": 72,
+                "gender": "Male",
+                "icd_code": "G20",
+                "diagnosis": "Parkinson's Disease"
+            },
+            "soap": {
+                "subjective": "Progressive tremors, difficulty walking, and balance issues",
+                "objective": {
+                    "key_findings": [
+                        "Resting tremor in right hand",
+                        "Bradykinesia",
+                        "Shuffling gait",
+                        "Masked facies"
+                    ]
+                },
+                "assessment": "Parkinson's Disease, early stage",
+                "plan": [
+                    "Start Carbidopa/Levodopa",
+                    "Physical therapy referral",
+                    "Follow-up in 3 months"
+                ]
+            },
+            "hpi": {
+                "onset": "Past year",
+                "progression": "Gradual",
+                "initial_symptom": "Slight tremor in right hand",
+                "recent_changes": [
+                    "Slower movements",
+                    "Difficulty with fine motor tasks",
+                    "Decreased facial expressions"
+                ]
+            },
+            "ros": {
+                "neurological": [
+                    "Tremors",
+                    "Bradykinesia",
+                    "Balance issues"
+                ],
+                "musculoskeletal": [
+                    "Muscle stiffness"
+                ],
+                "sleep": [
+                    "REM sleep behavior disorder"
+                ],
+                "gi": [
+                    "Mild constipation"
+                ]
+            },
+            "medical_history": {
+                "conditions": [
+                    "Hypertension",
+                    "Osteoarthritis"
+                ],
+                "medications": [
+                    "Lisinopril",
+                    "Glucosamine"
+                ],
+                "social_history": {
+                    "smoking": "No",
+                    "alcohol": "No"
+                }
+            }
+        },
+        {
+            "case_id": "MDD001",
+            "demographics": {
+                "name": "Sarah Martinez",
+                "age": 35,
+                "gender": "Female",
+                "icd_code": "F32.2",
+                "diagnosis": "Major Depressive Disorder"
+            },
+            "soap": {
+                "subjective": "Severe depression, anhedonia, and suicidal ideation",
+                "objective": {
+                    "presentation": [
+                        "Tearful",
+                        "Poor eye contact",
+                        "Psychomotor retardation"
+                    ],
+                    "assessment_scores": {
+                        "phq9": 23
+                    }
+                },
+                "assessment": "Major Depressive Disorder, severe without psychotic features",
+                "plan": [
+                    "Start Sertraline",
+                    "Urgent psychiatry referral",
+                    "Safety plan established"
+                ]
+            },
+            "hpi": {
+                "onset": "3 months ago",
+                "trigger": "Job loss",
+                "symptoms": [
+                    "Feeling hopeless",
+                    "Feeling worthless",
+                    "Sleep changes",
+                    "Appetite changes"
+                ]
+            },
+            "ros": {
+                "psychiatric": [
+                    "Depression",
+                    "Anxiety",
+                    "Suicidal thoughts"
+                ],
+                "constitutional": [
+                    "Weight loss",
+                    "Fatigue"
+                ],
+                "sleep": [
+                    "Insomnia"
+                ],
+                "gi": [
+                    "Poor appetite"
+                ]
+            },
+            "medical_history": {
+                "past_psychiatric": "Depression episode 5 years ago",
+                "conditions": [
+                    "Migraine headaches"
+                ],
+                "medications": "None",
+                "family_history": [
+                    "Depression"
+                ]
+            }
+        },
+        {
+            "case_id": "RA001",
+            "demographics": {
+                "name": "Linda Chen",
+                "age": 45,
+                "gender": "Female",
+                "icd_code": "M05.79",
+                "diagnosis": "Rheumatoid Arthritis"
+            },
+            "soap": {
+                "subjective": "Bilateral hand and wrist pain, morning stiffness lasting 2+ hours",
+                "objective": {
+                    "physical_findings": [
+                        "Symmetric swelling of MCP and PIP joints",
+                        "Reduced grip strength"
+                    ],
+                    "lab_results": {
+                        "rf": "Elevated",
+                        "anti_ccp": "Positive"
+                    }
+                },
+                "assessment": "Rheumatoid Arthritis, seropositive",
+                "plan": [
+                    "Start Methotrexate and folic acid",
+                    "Rheumatology referral"
+                ]
+            },
+            "hpi": {
+                "duration": "6 months",
+                "progression": "Progressive",
+                "pattern": "Started in hands, spread to wrists and knees",
+                "impact": "Morning stiffness significantly impacts daily activities"
+            },
+            "ros": {
+                "musculoskeletal": [
+                    "Joint pain",
+                    "Swelling",
+                    "Stiffness"
+                ],
+                "constitutional": [
+                    "Fatigue",
+                    "Low-grade fever"
+                ],
+                "skin": "No rashes",
+                "respiratory": "No shortness of breath"
+            },
+            "medical_history": {
+                "conditions": [
+                    "Hypothyroidism"
+                ],
+                "medications": [
+                    "Levothyroxine"
+                ],
+                "prior_joint_problems": "None",
+                "family_history": [
+                    "Autoimmune disorders"
+                ]
+            }
+        }
+    ]
+}

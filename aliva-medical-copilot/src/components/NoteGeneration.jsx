@@ -111,10 +111,34 @@ const NoteGeneration = ({ patient, onBack }) => {
     };
 
     const renderCodeSuggestions = (codes, type) => {
+
+        const handleApprove = (codeItem, index) => {
+            const element = document.querySelector(`#code-${type}-${index}`);
+            element.classList.add('approved');
+
+            // Remove buttons after animation
+            setTimeout(() => {
+                const actions = element.querySelector('.code-actions');
+                if (actions) {
+                    actions.style.display = 'none';
+                }
+            }, 500);
+        };
+
+        const handleReject = (codeItem, index) => {
+            const element = document.querySelector(`#code-${type}-${index}`);
+            element.classList.add('rejected');
+
+            // Remove element after animation
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 500);
+        };
         return codes.map((code, index) => (
             <div
                 className="code-item"
                 key={`${type}-${code.code}-${index}`}
+                id={`code-${type}-${index}`}
                 style={{ animationDelay: `${index * 0.1}s` }}
             >
                 <div className="code-info">
@@ -132,28 +156,29 @@ const NoteGeneration = ({ patient, onBack }) => {
                         </span>
                     </div>
                     <div className="code-buttons">
-                        <button className="code-button approve" title="Approve">
+                        <button
+                            className="code-button approve"
+                            title="Approve"
+                            onClick={() => handleApprove(code, index)}
+                        >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M20 6L9 17L4 12"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </button>
-                        <button className="code-button reject" title="Reject">
+                        <button
+                            className="code-button reject"
+                            title="Reject"
+                            onClick={() => handleReject(code, index)}
+                        >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M18 6L6 18M6 6L18 18"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
+                                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </button>
                     </div>
                 </div>
+                <svg className="checkmark-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
             </div>
         ));
     };

@@ -15,6 +15,10 @@ const NoteGeneration = ({ patient, onBack }) => {
     const [suggestedCPTCodes, setSuggestedCPTCodes] = useState([]);
     const [showICDCodes, setShowICDCodes] = useState(false);
     const [showCPTCodes, setShowCPTCodes] = useState(false);
+    const [showOptimizedCodes, setShowOptimizedCodes] = useState(false);
+    const [optimizedCodes, setOptimizedCodes] = useState([]);
+    const [isLoadingOptimized, setIsLoadingOptimized] = useState(false);
+    const [totalAdditionalRevenue, setTotalAdditionalRevenue] = useState(0);
 
     const toggleSection = (section) => {
         setExpandedSections(prev => ({
@@ -90,6 +94,78 @@ const NoteGeneration = ({ patient, onBack }) => {
         return suggestions;
     };
 
+    const generateOptimizedCodes = (patientData) => {
+        const suggestions = [];
+
+        // William Thompson (Parkinson's Disease)
+        if (patientData.case_id === 'PD001') {
+            suggestions.push({
+                code: 'R27.8',
+                description: 'Other lack of coordination',
+                additionalRevenue: 175,
+                confidence: 0.85
+            });
+            suggestions.push({
+                code: 'G47.61',
+                description: 'REM sleep behavior disorder',
+                additionalRevenue: 225,
+                confidence: 0.90
+            });
+            suggestions.push({
+                code: 'K59.00',
+                description: 'Constipation, unspecified',
+                additionalRevenue: 150,
+                confidence: 0.75
+            });
+        }
+
+        // Sarah Martinez (Major Depressive Disorder)
+        if (patientData.case_id === 'MDD001') {
+            suggestions.push({
+                code: 'F41.1',
+                description: 'Generalized anxiety disorder',
+                additionalRevenue: 200,
+                confidence: 0.88
+            });
+            suggestions.push({
+                code: 'G47.00',
+                description: 'Insomnia disorder',
+                additionalRevenue: 175,
+                confidence: 0.82
+            });
+            suggestions.push({
+                code: 'R63.4',
+                description: 'Abnormal weight loss',
+                additionalRevenue: 150,
+                confidence: 0.78
+            });
+        }
+
+        // Linda Chen (Rheumatoid Arthritis)
+        if (patientData.case_id === 'RA001') {
+            suggestions.push({
+                code: 'R53.82',
+                description: 'Chronic fatigue, unspecified',
+                additionalRevenue: 165,
+                confidence: 0.80
+            });
+            suggestions.push({
+                code: 'M25.50',
+                description: 'Pain in unspecified joint',
+                additionalRevenue: 185,
+                confidence: 0.85
+            });
+            suggestions.push({
+                code: 'R50.9',
+                description: 'Fever, unspecified',
+                additionalRevenue: 145,
+                confidence: 0.75
+            });
+        }
+
+        return suggestions;
+    };
+
     const handleGenerateCodes = async (type) => {
         if (type === 'ICD') {
             setIsLoadingICD(true);
@@ -108,6 +184,18 @@ const NoteGeneration = ({ patient, onBack }) => {
             setIsLoadingCPT(false);
             setShowCPTCodes(true);
         }
+    };
+
+    const handleOptimizeCodes = async () => {
+        setIsLoadingOptimized(true);
+        setShowOptimizedCodes(false);
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const codes = generateOptimizedCodes(patient);
+        setOptimizedCodes(codes);
+        const initialRevenue = codes.reduce((sum, code) => sum + code.additionalRevenue, 0);
+        setTotalAdditionalRevenue(initialRevenue);
+        setIsLoadingOptimized(false);
+        setShowOptimizedCodes(true);
     };
 
     const renderCodeSuggestions = (codes, type) => {
@@ -129,6 +217,11 @@ const NoteGeneration = ({ patient, onBack }) => {
             const element = document.querySelector(`#code-${type}-${index}`);
             element.classList.add('rejected');
 
+            // Update total revenue by subtracting the rejected code's revenue
+            if (codeItem.additionalRevenue) {
+                setTotalAdditionalRevenue(prev => prev - codeItem.additionalRevenue);
+            }
+
             // Remove element after animation
             setTimeout(() => {
                 element.style.display = 'none';
@@ -144,6 +237,9 @@ const NoteGeneration = ({ patient, onBack }) => {
                 <div className="code-info">
                     <span className="code">{code.code}</span>
                     <span className="description">{code.description}</span>
+                    {code.additionalRevenue && (
+                        <span className="revenue">+${code.additionalRevenue}</span>
+                    )}
                 </div>
                 <div className="code-actions">
                     <div className="confidence-meter">
@@ -377,6 +473,39 @@ const NoteGeneration = ({ patient, onBack }) => {
                                 {showCPTCodes && (
                                     <div className="code-suggestions">
                                         {renderCodeSuggestions(suggestedCPTCodes, 'CPT')}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="coding-box optimization-box">
+                                <h3>Billing Optimization</h3>
+                                <button
+                                    className={`generate-button optimize ${isLoadingOptimized ? 'loading' : ''}`}
+                                    onClick={handleOptimizeCodes}
+                                    disabled={isLoadingOptimized}
+                                >
+                                    {isLoadingOptimized ? (
+                                        <>
+                                            <div className="loader"></div>
+                                            <span>Analyzing...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <svg className="ai-icon" viewBox="0 0 24 24" fill="none">
+                                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                            <span>Enable Revenue Optimization Agent</span>
+                                        </>
+                                    )}
+                                </button>
+                                {showOptimizedCodes && (
+                                    <div className="code-suggestions">
+                                        <div className="total-revenue">
+                                            <span>Potential Additional Revenue: </span>
+                                            <strong>${totalAdditionalRevenue}</strong>
+                                        </div>
+                                        {renderCodeSuggestions(optimizedCodes, 'OPT')}
                                     </div>
                                 )}
                             </div>

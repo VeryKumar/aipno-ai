@@ -62,6 +62,19 @@ const NoteGeneration = ({ patient, onBack }) => {
                 confidence: 0.35
             });
         }
+        // Add specific suggestions for cervical spine injury
+        if (patientData.case_id === 'WC001') {
+            suggestions.push({
+                code: 'S13.4XXA',
+                description: 'Cervical sprain/strain, initial encounter',
+                confidence: 0.95
+            });
+            suggestions.push({
+                code: 'V43.52XA',
+                description: 'Car passenger injured in collision, initial encounter',
+                confidence: 0.85
+            });
+        }
 
         return suggestions;
     };
@@ -91,11 +104,68 @@ const NoteGeneration = ({ patient, onBack }) => {
             });
         }
 
+        if (patientData.case_id === 'WC001') {
+            suggestions.push({
+                code: '99203',
+                description: 'Office Visit, New Patient - Detailed History & Exam',
+                confidence: 0.92
+            });
+            suggestions.push({
+                code: '97110',
+                description: 'Therapeutic Exercise, 15 minutes',
+                confidence: 0.85
+            });
+            suggestions.push({
+                code: '97014',
+                description: 'Electric Stimulation Therapy',
+                confidence: 0.75
+            });
+            suggestions.push({
+                code: '72040',
+                description: 'X-Ray Examination, Cervical Spine, 3 views',
+                confidence: 0.80
+            });
+        }
+
         return suggestions;
     };
 
     const generateOptimizedCodes = (patientData) => {
         const suggestions = [];
+
+        // John Doe (Cervical Spine Injury)
+        if (patientData.case_id === 'WC001') {
+            suggestions.push({
+                code: 'M54.2',
+                description: 'Cervicalgia',
+                additionalRevenue: 185,
+                confidence: 0.92
+            });
+            suggestions.push({
+                code: 'J3301',
+                description: 'Triamcinolone injection',  // Shortened
+                additionalRevenue: 225,
+                confidence: 0.88
+            });
+            suggestions.push({
+                code: 'J2001',
+                description: 'Lidocaine injection',  // Shortened
+                additionalRevenue: 195,
+                confidence: 0.85
+            });
+            suggestions.push({
+                code: 'J0702',
+                description: 'Betamethasone injection',  // Shortened
+                additionalRevenue: 210,
+                confidence: 0.82
+            });
+            suggestions.push({
+                code: 'Y93.C2',
+                description: 'Motor vehicle activity',  // Shortened
+                additionalRevenue: 125,
+                confidence: 0.95
+            });
+        }
 
         // William Thompson (Parkinson's Disease)
         if (patientData.case_id === 'PD001') {

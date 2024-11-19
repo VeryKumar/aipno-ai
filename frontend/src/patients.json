@@ -191,6 +191,69 @@
                     "Autoimmune disorders"
                 ]
             }
+        },
+        {
+            "case_id": "WC001",
+            "demographics": {
+                "name": "John Doe",
+                "age": 40,
+                "gender": "Male",
+                "icd_code": "S13.4XXA",
+                "diagnosis": "Cervical Spine Ligament Sprain"
+            },
+            "soap": {
+                "subjective": "Neck pain and stiffness following a rear-end collision; difficulty turning head.",
+                "objective": {
+                    "key_findings": [
+                        "Tenderness along cervical paraspinal muscles",
+                        "Limited range of motion in cervical spine",
+                        "No neurological deficits"
+                    ]
+                },
+                "assessment": "Cervical sprain/strain due to motor vehicle accident",
+                "plan": [
+                    "Prescribe muscle relaxants and NSAIDs",
+                    "Recommend physical therapy 3 times a week for 4 weeks",
+                    "Follow-up in 2 weeks to assess progress",
+                    "Consider imaging (MRI) if symptoms persist"
+                ]
+            },
+            "hpi": {
+                "onset": "2 days ago",
+                "mechanism": "Rear-end collision while at a stoplight",
+                "symptoms": [
+                    "Pain in neck and shoulders",
+                    "Mild headache",
+                    "Stiffness worsening with movement"
+                ],
+                "mitigating_factors": "Applying heat provides slight relief",
+                "exacerbating_factors": "Rotating neck, driving, or prolonged sitting"
+            },
+            "ros": {
+                "musculoskeletal": [
+                    "Neck pain",
+                    "Shoulder discomfort"
+                ],
+                "neurological": [
+                    "No numbness or tingling"
+                ],
+                "constitutional": [
+                    "No fever or chills"
+                ]
+            },
+            "medical_history": {
+                "conditions": [
+                    "None reported"
+                ],
+                "medications": [
+                    "None"
+                ],
+                "social_history": {
+                    "occupation": "Delivery driver",
+                    "smoking": "No",
+                    "alcohol": "Occasional"
+                }
+            }
         }
     ]
 }

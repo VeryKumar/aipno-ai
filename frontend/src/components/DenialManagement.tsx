@@ -6,7 +6,7 @@ interface ClaimStatus {
   date: string;
   status: string;
   carc: string[];
-  era?: string; // Add ERA to the interface
+  era?: string;
 }
 
 interface PatientClaim {
@@ -22,22 +22,28 @@ interface PatientClaim {
 interface PatientProps {
   patient: {
     claims: PatientClaim[];
+    soap?: any;
+    demographics?: any;
+    hpi?: any;
+    ros?: any;
+    medical_history?: any;
   };
 }
 
 interface CrossReferenceData {
-    eraInfo: string;
-    clinicalDetail: string;
-    outcome: string;
-  }
+  eraInfo: string;
+  clinicalDetail: string;
+  outcome: string;
+}
 
 const DenialManagement = ({ patient }: PatientProps) => {
-const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [claimResult, setClaimResult] = useState<ClaimStatus | null>(null);
   const [showERA, setShowERA] = useState(false);
   const [showCrossReference, setShowCrossReference] = useState(false);
   const [crossReferenceData, setCrossReferenceData] = useState<CrossReferenceData[]>([]);
-
+  const [isSending, setIsSending] = useState(false);
+  const [appealSent, setAppealSent] = useState(false);
 
   const handleSendClaim = async () => {
     setIsLoading(true);
@@ -66,14 +72,149 @@ const [isLoading, setIsLoading] = useState(false);
   const handleCrossReference = async () => {
     setShowCrossReference(true);
     
-    // Example data - in real app, this would come from API
     setCrossReferenceData([
       {
-        eraInfo: `Claim ID: ${patient?.claims?.[0]?.claim_ID || 'N/A'}`,
-        clinicalDetail: `Diagnosis: ${patient?.demographics?.diagnosis || 'N/A'}`,
-        outcome: "Match confirmed - Clinical documentation supports claim"
+        eraInfo: `
+<strong>Claim Details</strong>
+<div class="info-pair">
+  <span class="label">Claim ID:</span>
+  <span class="value">${patient?.claims?.[0]?.claim_ID || 'N/A'}</span>
+</div>
+<div class="info-pair">
+  <span class="label">Status:</span>
+  <span class="value">
+    <span class="status-indicator ${getStatusClass(patient?.claims?.[0]?.CARC_category?.status)}">
+      ${patient?.claims?.[0]?.CARC_category?.status || 'N/A'}
+    </span>
+  </span>
+</div>
+<div class="section-divider"></div>
+<strong>CARC Information</strong>
+<div class="info-pair">
+  <span class="label">Code:</span>
+  <span class="value"><span class="code-block">${patient?.claims?.[0]?.CARC_category?.code}</span></span>
+</div>
+<div class="info-pair">
+  <span class="label">Description:</span>
+  <span class="value">${patient?.claims?.[0]?.CARC_category?.description}</span>
+</div>`,
+        clinicalDetail: `
+<strong>SOAP Documentation</strong>
+<ul>
+  <li><b>Subjective:</b> ${patient?.soap?.subjective || 'N/A'}</li>
+  <li><b>Objective:</b> ${patient?.soap?.objective?.key_findings?.join(', ') || 'N/A'}</li>
+  <li><b>Assessment:</b> ${patient?.soap?.assessment || 'N/A'}</li>
+  <li><b>Plan:</b> ${patient?.soap?.plan?.join(', ') || 'N/A'}</li>
+</ul>
+<div class="section-divider"></div>
+<strong>Supporting Documentation</strong>
+<ul>
+  <li>Diagnosis Code: <span class="code-block">${patient?.demographics?.icd_code}</span></li>
+  <li>Documented Diagnosis: ${patient?.demographics?.diagnosis}</li>
+  <li>Onset: ${patient?.hpi?.onset || 'N/A'}</li>
+  <li>ROS Findings: ${patient?.ros?.neurological?.join(', ') || 'N/A'}</li>
+</ul>`,
+        outcome: `
+<strong>Analysis Results</strong>
+<div class="status-indicator ${getAnalysisStatusClass(patient)}">
+  ${determineRecommendation(patient)}
+</div>
+<ul>
+  <li><b>Documentation Quality:</b> ${assessDocumentationCompleteness(patient)}</li>
+  <li><b>Clinical Alignment:</b> Documentation ${assessClinicalAlignment(patient)}</li>
+  <li><b>Medical Necessity:</b> ${assessMedicalNecessity(patient)}</li>
+</ul>
+<div class="section-divider"></div>
+<strong>Recommended Actions</strong>
+<ul>
+  ${generateRecommendedActions(patient).map(action => `<li>${action}</li>`).join('')}
+</ul>`
       }
     ]);
+  };
+
+  const handleSendAppeal = async () => {
+    setIsSending(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    setAppealSent(true);
+    
+    // Reset after showing success state
+    setTimeout(() => {
+      setIsSending(false);
+      setAppealSent(false);
+    }, 3000);
+  };
+
+  // Helper functions
+  const determineRecommendation = (patient: any) => {
+    const status = patient?.claims?.[0]?.CARC_category?.status;
+    if (status === 'Denied') {
+      return 'Appeal recommended based on documented medical necessity';
+    } else if (status === 'Pending') {
+      return 'Submit additional documentation to support medical necessity';
+    }
+    return 'Monitor claim status and maintain documentation';
+  };
+
+  const formatSocialHistory = (socialHistory: any) => {
+    if (!socialHistory) return 'Not documented';
+    return Object.entries(socialHistory)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join(', ');
+  };
+
+  const assessDocumentationCompleteness = (patient: any) => {
+    const requiredFields = ['soap', 'hpi', 'ros', 'medical_history'];
+    const completedFields = requiredFields.filter(field => patient?.[field]);
+    const completeness = (completedFields.length / requiredFields.length) * 100;
+    
+    if (completeness === 100) return 'Complete documentation';
+    if (completeness >= 75) return 'Mostly complete - minor gaps identified';
+    if (completeness >= 50) return 'Partial documentation - significant gaps';
+    return 'Incomplete documentation - immediate attention required';
+  };
+
+  const getStatusClass = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'approved':
+      case 'paid':
+        return 'positive';
+      case 'denied':
+      case 'requires-action':
+        return 'negative';
+      case 'pending':
+      case 'partially-paid':
+        return 'warning';
+      default:
+        return '';
+    }
+  };
+
+  const getAnalysisStatusClass = (patient: any) => {
+    const completeness = assessDocumentationCompleteness(patient);
+    if (completeness.includes('Complete')) return 'positive';
+    if (completeness.includes('Mostly')) return 'warning';
+    return 'negative';
+  };
+
+  const assessClinicalAlignment = (patient: any) => {
+    return 'shows strong correlation with reported symptoms and diagnosis';
+  };
+
+  const assessMedicalNecessity = (patient: any) => {
+    return 'Established through documented severity and progression';
+  };
+
+  const generateRecommendedActions = (patient: any) => {
+    return [
+      'Submit complete SOAP documentation',
+      'Include relevant diagnostic codes',
+      'Attach supporting clinical evidence',
+      'Reference medical necessity criteria'
+    ];
   };
 
   return (
@@ -158,6 +299,50 @@ const [isLoading, setIsLoading] = useState(false);
                 </svg>
                 <span>Cross-Reference</span>
               </button>
+              <button
+                className="generate-button send-appeal"
+                onClick={handleSendAppeal}
+                disabled={isSending || appealSent}
+              >
+                {!isSending && !appealSent && (
+                  <>
+                    <svg className="ai-icon" viewBox="0 0 24 24" fill="none">
+                      <path 
+                        d="M21.7 4.3L16.7 19.3C16.4 20.3 15 20.3 14.6 19.4L11.6 12.4L4.6 9.4C3.7 9 3.7 7.6 4.7 7.3L19.7 2.3C20.6 2 21.4 2.8 21.7 4.3Z" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span>Send Appeal</span>
+                  </>
+                )}
+                {isSending && !appealSent && (
+                  <div className="send-animation">
+                    <svg className="ai-icon paper-plane" viewBox="0 0 24 24" fill="none">
+                      <path 
+                        d="M21.7 4.3L16.7 19.3C16.4 20.3 15 20.3 14.6 19.4L11.6 12.4L4.6 9.4C3.7 9 3.7 7.6 4.7 7.3L19.7 2.3C20.6 2 21.4 2.8 21.7 4.3Z" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                )}
+                {appealSent && (
+                  <div className="send-animation">
+                    <svg className="ai-icon success-check" viewBox="0 0 24 24" fill="none">
+                      <path 
+                        d="M20 6L9 17L4 12" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </button>
             </div>
             {showERA && claimResult.era && (
               <div className="era-content">
@@ -177,9 +362,9 @@ const [isLoading, setIsLoading] = useState(false);
                   <tbody>
                     {crossReferenceData.map((row, index) => (
                       <tr key={index}>
-                        <td>{row.eraInfo}</td>
-                        <td>{row.clinicalDetail}</td>
-                        <td>{row.outcome}</td>
+                        <td dangerouslySetInnerHTML={{ __html: row.eraInfo }}></td>
+                        <td dangerouslySetInnerHTML={{ __html: row.clinicalDetail }}></td>
+                        <td dangerouslySetInnerHTML={{ __html: row.outcome }}></td>
                       </tr>
                     ))}
                   </tbody>

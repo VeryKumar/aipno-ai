@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DenialManagement from './DenialManagement';
 import './NoteGeneration.css';
 
 const NoteGeneration = ({ patient, onBack }) => {
@@ -427,6 +428,12 @@ const NoteGeneration = ({ patient, onBack }) => {
                     >
                         Medical Coding
                     </button>
+                    <button
+                        className={`tab-button ${activeTab === 'denialManagement' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('denialManagement')}
+                    >
+                        Denial Management
+                    </button>
                 </div>
 
                 <div className="note-content">
@@ -579,6 +586,11 @@ const NoteGeneration = ({ patient, onBack }) => {
                                     </div>
                                 )}
                             </div>
+                        </div>
+                    )}
+                    {activeTab === 'denialManagement' && (
+                        <div className="denial-section">
+                            <DenialManagement patient={patient} />
                         </div>
                     )}
                 </div>

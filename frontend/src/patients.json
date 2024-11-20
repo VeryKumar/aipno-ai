@@ -9,6 +9,17 @@
                 "icd_code": "G20",
                 "diagnosis": "Parkinson's Disease"
             },
+            "claims": [
+                {
+                    "claim_ID": "123456789",
+                    "ERA": "ISA*00*          *00*          *ZZ*SUBMITTERID    *ZZ*RECEIVERID     *20241120*0108*^*00501*000000001*0*T*:~GS*HC*SUBMITTERID*RECEIVERID*20241120*0108*1*X*005010X222~ST*835*0001*005010X222~BPR*I*0*C*ACH*CTX*01*123456789*DA*987654321*1512345678**01*987654321*DA*123456789*20241120~",
+                    "CARC_category": {
+                        "status": "Pending",
+                        "code": "16",
+                        "description": "Claim/service lacks information or has submission/billing error(s)"
+                    }
+                }
+            ],
             "soap": {
                 "subjective": "Progressive tremors, difficulty walking, and balance issues",
                 "objective": {
@@ -76,6 +87,17 @@
                 "icd_code": "F32.2",
                 "diagnosis": "Major Depressive Disorder"
             },
+            "claims": [
+                {
+                    "claim_ID": "234567890",
+                    "ERA": "ISA*00*          *00*          *ZZ*SUBMITTERID    *ZZ*RECEIVERID     *20241120*0108*^*00501*000000002*0*T*:~GS*HC*SUBMITTERID*RECEIVERID*20241120*0108*2*X*005010X222~ST*835*0002*005010X222~BPR*I*0*C*ACH*CTX*01*123456789*DA*987654321*1512345678**01*987654321*DA*123456789*20241120~",
+                    "CARC_category": {
+                        "status": "Approved",
+                        "code": "1",
+                        "description": "Deductible amount"
+                    }
+                }
+            ],
             "soap": {
                 "subjective": "Severe depression, anhedonia, and suicidal ideation",
                 "objective": {
@@ -142,6 +164,17 @@
                 "icd_code": "M05.79",
                 "diagnosis": "Rheumatoid Arthritis"
             },
+            "claims": [
+                {
+                    "claim_ID": "345678901",
+                    "ERA": "ISA*00*          *00*          *ZZ*SUBMITTERID    *ZZ*RECEIVERID     *20241120*0108*^*00501*000000003*0*T*:~GS*HC*SUBMITTERID*RECEIVERID*20241120*0108*3*X*005010X222~ST*835*0003*005010X222~BPR*I*0*C*ACH*CTX*01*123456789*DA*987654321*1512345678**01*987654321*DA*123456789*20241120~",
+                    "CARC_category": {
+                        "status": "Denied",
+                        "code": "50",
+                        "description": "Non-covered services because this is not deemed a 'medical necessity' by the payer"
+                    }
+                }
+            ],
             "soap": {
                 "subjective": "Bilateral hand and wrist pain, morning stiffness lasting 2+ hours",
                 "objective": {
@@ -201,6 +234,17 @@
                 "icd_code": "S13.4XXA",
                 "diagnosis": "Cervical Spine Ligament Sprain"
             },
+            "claims": [
+                {
+                    "claim_ID": "456789012",
+                    "ERA": "ISA*00*          *00*          *ZZ*SUBMITTERID    *ZZ*RECEIVERID     *20241120*0108*^*00501*000000004*0*T*:~GS*HC*SUBMITTERID*RECEIVERID*20241120*0108*4*X*005010X222~ST*835*0004*005010X222~BPR*I*0*C*ACH*CTX*01*123456789*DA*987654321*1512345678**01*987654321*DA*123456789*20241120~",
+                    "CARC_category": {
+                        "status": "Paid",
+                        "code": "24",
+                        "description": "Charges are covered under a capitation agreement/managed care plan"
+                    }
+                }
+            ],
             "soap": {
                 "subjective": "Neck pain and stiffness following a rear-end collision; difficulty turning head.",
                 "objective": {

@@ -1,0 +1,257 @@
+.risk-agent {
+    padding: 1rem;
+  }
+  
+  .risk-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .generate-button.risk {
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+  }
+  
+  .generate-button.compliance {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+  }
+  
+  .generate-button.audit {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  }
+  
+  .generate-button.risk:hover:not(:disabled) {
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+  }
+  
+  .generate-button.compliance:hover:not(:disabled) {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+  
+  .generate-button.audit:hover:not(:disabled) {
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  }
+  
+  .generate-button.active {
+    position: relative;
+  }
+  
+  .generate-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 3px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+  
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .finding-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .finding-card.high {
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+  
+  .finding-card.medium {
+    border-color: rgba(234, 179, 8, 0.3);
+  }
+  
+  .finding-card.warning {
+    border-color: rgba(234, 179, 8, 0.3);
+  }
+  
+  .finding-card.success {
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+  
+  .finding-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .finding-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-color);
+  }
+  
+  .score-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .finding-content {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+  }
+  
+  .findings-list {
+    margin: 0.75rem 0;
+    padding-left: 1.25rem;
+  }
+  
+  .findings-list li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .recommendation {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    font-weight: 500;
+  }
+  
+  @media (max-width: 768px) {
+    .risk-buttons {
+      flex-direction: column;
+    }
+    
+    .generate-button {
+      width: 100%;
+    }
+  }
+
+  .generate-button.work-on-it {
+    background: linear-gradient(135deg, #059669, #10b981);
+    margin-top: 1.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .generate-button.work-on-it:hover:not(:disabled) {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+  
+  .work-plan-result {
+    margin-top: 2rem;
+  }
+  
+  .plan-summary {
+    display: flex;
+    gap: 2rem;
+    margin: 1.5rem 0;
+  }
+  
+  .metric {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .metric span {
+    display: block;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 0.5rem;
+  }
+  
+  .metric strong {
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  .task-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .task-card.critical {
+    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.05);
+  }
+  
+  .task-card.high {
+    border-color: rgba(244, 63, 94, 0.4);
+    background: rgba(244, 63, 94, 0.05);
+  }
+  
+  .task-card.medium {
+    border-color: rgba(234, 179, 8, 0.4);
+    background: rgba(234, 179, 8, 0.05);
+  }
+  
+  .task-card.low {
+    border-color: rgba(34, 197, 94, 0.4);
+    background: rgba(34, 197, 94, 0.05);
+  }
+  
+  .task-severity {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    color: #fff;
+  }
+  
+  .task-card.critical .task-severity {
+    background: rgba(239, 68, 68, 0.9);
+  }
+  
+  .task-card.high .task-severity {
+    background: rgba(244, 63, 94, 0.9);
+  }
+  
+  .task-card.medium .task-severity {
+    background: rgba(234, 179, 8, 0.9);
+  }
+  
+  .task-card.low .task-severity {
+    background: rgba(34, 197, 94, 0.9);
+  }
+  
+  .task-card h5 {
+    color: var(--text-color);
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+  }
+  
+  .task-card p {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .task-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  
+  .task-type {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .task-severity {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+  }

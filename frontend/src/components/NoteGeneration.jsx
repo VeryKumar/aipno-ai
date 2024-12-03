@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
+import SoapSection from './SoapSection';
 import DenialManagement from './DenialManagement';
+import RiskAgent from './RiskAgent';
 import './NoteGeneration.css';
 
 const NoteGeneration = ({ patient, onBack }) => {
@@ -434,6 +436,12 @@ const NoteGeneration = ({ patient, onBack }) => {
                     >
                         Denial Management
                     </button>
+                    <button
+                        className={`tab-button ${activeTab === 'riskAgent' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('riskAgent')}
+                    >
+                        Risk Agent
+                    </button>
                 </div>
 
                 <div className="note-content">
@@ -591,6 +599,11 @@ const NoteGeneration = ({ patient, onBack }) => {
                     {activeTab === 'denialManagement' && (
                         <div className="denial-section">
                             <DenialManagement patient={patient} />
+                        </div>
+                    )}
+                    {activeTab === 'riskAgent' && (
+                        <div className="risk-section">
+                            <RiskAgent patient={patient} />
                         </div>
                     )}
                 </div>

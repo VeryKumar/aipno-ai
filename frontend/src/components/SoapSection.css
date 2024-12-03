@@ -1,0 +1,51 @@
+.soap-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.section-header {
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.section-content {
+    padding: 1.5rem;
+}
+
+.section-content p {
+    margin: 0 0 0.75rem 0;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.section-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Section-specific styling */
+.soap-section.subjective {
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.soap-section.objective {
+    border-color: rgba(236, 72, 153, 0.2);
+}
+
+.soap-section.assessment {
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+.soap-section.plan {
+    border-color: rgba(234, 179, 8, 0.2);
+}

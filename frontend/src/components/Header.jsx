@@ -3,7 +3,7 @@ import React from 'react';
 const Header = () => {
     return (
         <header>
-            <h1>Aliva Medical Copilot</h1>
+            <h1>Emerge AI</h1>
             <nav>
                 <ul>
                     <li><a href="#home">Home</a></li>

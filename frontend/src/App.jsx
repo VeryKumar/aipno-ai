@@ -31,7 +31,7 @@ const App = () => {
               <rect x="3" y="10" width="18" height="4" rx="2" fill="currentColor" />
             </svg>
           </div>
-          <h1>Aliva Medical Copilot</h1>
+          <h1>Emerge AIt</h1>
           <h2>Reduce clinician burnout, increase patient satisfaction, and ensure best practices in patient care</h2>
           <button className="cta-button" onClick={handleGetStarted}>
             <span>Get Started</span>
